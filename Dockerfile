@@ -1,6 +1,8 @@
 # amd64 only — build with: docker build --platform linux/amd64 ...
 # Stage 1: build ik_llama.cpp's llama-server
-FROM debian:bookworm-slim AS ik-build
+# ubuntu:24.04 matches the glibc (2.39) of the llama-swap:cpu runtime stage,
+# and its GCC 13 knows -mtune=gracemont (bookworm's GCC 12 doesn't)
+FROM ubuntu:24.04 AS ik-build
 
 ARG IK_COMMIT=bbc7de475178dd0535c16ad85f204a2529806c9d
 # Mainline llama.cpp tag whose committed pre-built web UI we bundle for the ik
