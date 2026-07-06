@@ -10,6 +10,8 @@ ARG WEBUI_REF=b6900
 # Override when the build host's native features differ from the target's,
 # e.g. building under Rosetta: "-DGGML_NATIVE=OFF -DGGML_AVX2=ON -DGGML_FMA=ON -DGGML_F16C=ON"
 ARG CPU_FLAGS="-DGGML_NATIVE=ON"
+# Extra compiler flags, e.g. "-march=alderlake" when cross-building for a known target CPU
+ARG ARCH_FLAGS=""
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         git gcc g++ cmake make ca-certificates \
@@ -22,7 +24,7 @@ RUN git clone https://github.com/ikawrakow/ik_llama.cpp.git . \
 # -include cstdint: iqk_common.h uses uint64_t without including <cstdint>,
 # which newer GCC rejects
 RUN cmake -B build $CPU_FLAGS -DLLAMA_CURL=OFF -DCMAKE_BUILD_TYPE=Release \
-        -DCMAKE_CXX_FLAGS="-include cstdint" \
+        -DCMAKE_C_FLAGS="$ARCH_FLAGS" -DCMAKE_CXX_FLAGS="-include cstdint $ARCH_FLAGS" \
     && cmake --build build --target llama-server -j4
 
 # Collect the binary and all shared libs it needs into one dir

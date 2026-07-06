@@ -40,5 +40,6 @@ jobs:
           # Target: Intel N100 (Alder Lake-N / Gracemont) — AVX2+FMA+F16C+AVX-VNNI, no AVX-512
           build-args: |
             CPU_FLAGS=-DGGML_NATIVE=OFF -DGGML_AVX2=ON -DGGML_FMA=ON -DGGML_F16C=ON -DGGML_AVXVNNI=ON
+            ARCH_FLAGS=-march=alderlake
           cache-from: type=gha
           cache-to: type=gha,mode=max
