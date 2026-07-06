@@ -37,8 +37,7 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          # Runner CPU features vary; bake portable AVX2 instead of -march=native
           build-args: |
-            CPU_FLAGS=-DGGML_NATIVE=OFF -DGGML_AVX2=ON -DGGML_FMA=ON -DGGML_F16C=ON
+            CPU_FLAGS=-DGGML_NATIVE=ON
           cache-from: type=gha
           cache-to: type=gha,mode=max
